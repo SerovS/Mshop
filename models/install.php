@@ -236,7 +236,7 @@ $sql = "INSERT INTO " . $this->modx->getFullTableName('system_eventnames') . "  
 VALUES (NULL , 'OnMShopOrderFrontView', '7', 'MShop'),
 VALUES (NULL , 'OnMShopCartFrontInit', '7', 'MShop'),
 VALUES (NULL , 'OnMShopModelInit', '7', 'MShop'),
-VALUES (NULL , 'OnMShopControllerRun', '7', 'MShop'),
+VALUES (NULL , 'OnMShopControllerRun', '7', 'MShop')
 ;";
 $result = $this->modx->db->query($sql);
 if ($result)

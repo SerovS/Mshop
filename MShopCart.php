@@ -27,7 +27,7 @@ echo '
     </script>
     <script type="text/javascript" src="/assets/modules/shop/js/front.js"></script>';
     $modx->invokeEvent("OnMShopCartFrontInit");
-        
+    
 try {
     $result = $mshop->getCartInfo();
     if ($config['get_cart_html'] == 1 && $mshop->validString($config['cart_tpl']) && $mshop->validString($config['products_tpl']))
