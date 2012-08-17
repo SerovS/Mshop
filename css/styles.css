@@ -1,0 +1,271 @@
+.container {
+    padding:10px;
+    height:auto;
+}
+
+.installbox { font-size:1.3em; }
+
+.installbox, .warning {
+    border:1px solid #F90;
+    background-color:#FFA;
+    padding:5px;
+}
+
+.splash h1, .splash p { margin:0.5em 0em; }
+
+.warning {
+
+    background-repeat:no-repeat;
+    background-position:10px center;
+    padding-left:35px;
+    margin-bottom:1em;
+}
+
+
+
+.actionButtons a {
+    float:left;
+}
+
+.button, input.button {
+
+
+    cursor:pointer;
+    margin-right:5px;
+    color:#000 !important;
+    font-size: 150%;
+
+}
+
+.button:hover {
+
+}
+
+.actionButtons .edit, .actionButtons .edit:hover {
+    background: #BEBF83;
+    text-shadow: none;
+    font-weight: normal;
+    font-size: 11px;
+    border: 0;
+    height:16px;
+    display:inline-block;
+}
+
+.actionButtons .delete, .actionButtons .delete:hover {
+
+}
+
+.actionButtons .back, .actionButtons .back:hover, .actionButtons .stop, .actionButtons .stop:hover{
+
+}
+
+.actionButtons .save, .actionButtons .save:hover {
+
+}
+
+.actionButtons .cancel, .actionButtons .cancel:hover {
+
+}
+
+.actionButtons .confirm, .actionButtons .confirm:hover {
+    ;
+}
+
+.actionButtons .choice, .actionButtons .choice:hover {
+
+}
+
+.actionButtons .clear, .actionButtons .clear:hover {
+
+}
+
+
+
+input.disabled, .button.disabled {
+    background-color:#CCC !important;
+    color:#666 !important;
+}
+
+a.translation_ok, a.translation_miss, .item_active, .editdate, .moveup, .movedown {
+    width:16px;
+    height:16px;
+    display:block;
+}
+
+a.translation_ok {
+
+}
+
+.item_active {
+
+}
+
+.editdate {
+    float:left;
+    margin-left:10px;
+    cursor:pointer;
+
+}
+
+.moveup {
+
+}
+
+.movedown {
+
+}
+
+a.translation_ok span, a.translation_miss span, .item_active span, .editdate span, .moveup span, .movedown span { display:none; }
+
+.formtable { width:100%; }
+.formtable th { text-align:left; }
+.formtable input { float:left; }
+
+.grid .active { background-color:#dff7a8; }
+
+.error, .info {
+    padding:5px;
+    border:1px solid #600;
+    background-color:#FAA;
+    margin-bottom:1em;
+}
+
+.info {
+    border:1px solid #066;
+    background-color:#AFF;
+}
+.success p, .error p, .warning p, .info p { color:#000; font-weight:normal; width:75%; font-size:1.2em; }
+
+.error .button, .warning .button, .info .button {
+    background-color:#FFF;
+    margin-right:1em;
+}
+
+a.tab { text-decoration:none !important; }
+
+.message { float:left; clear:both; }
+.message .msg { float:left; width:100%; }
+a.messageclose {
+    display:block;
+    float:left;
+    width:16px;
+    height:16px;
+}
+
+.tab-page .sectionBody, .tab-page .sectionHeader {
+    margin:0px;
+}
+
+.sectionBody {
+    min-height: 400px;
+}
+
+.grid th.gridHeader {
+    text-align:left !important;
+    white-space:nowrap !important;
+    padding:3px 5px 1px 5px;
+    height:auto;
+}
+
+form#mutate select.inputBox, form#mutate input, form#mutate textarea {
+    width: 50px;
+}
+
+
+td {
+    padding: 3px;
+    margin: 0px;
+}
+
+.lc {
+    float: left;
+    width: 430px;
+}
+
+.colorbox {
+    display: inline-block;
+    border: 1px solid #c2c2c2;
+    width: 30px;
+    height: 30px;
+}
+
+.wt td{
+    background: #EFEFEF;
+}
+
+.zebra {
+    padding:0;
+    border-collapse:collapse;
+
+}
+
+.htr {
+    font-weight: bold;
+}
+
+.bl td {
+    border-bottom: 1px dotted #c2c2c2;
+}
+
+input.size {
+    width:40px;
+}
+.note {
+    color:#878787;
+}
+
+.userdata, .productsdata, .orderdata, .editblock {
+    background:#F7F7F7;
+    border: 1px solid #CFCFCF;
+    padding: 20px;    
+    border-radius:6px;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+}
+
+.orderdata {
+    margin: 0 0 20px 0;
+}
+
+.userdata {
+    margin: 20px 0;
+}
+
+.productsdata {
+    margin-left: 30px;
+}
+
+.big {
+    font-size:150%;
+}
+.small {
+    font-size:10px;
+}
+
+.outlink {
+    padding-right: 12px;
+    background: url(img/outlink.png) no-repeat right;
+}
+
+div.pager {
+    clear: both;
+    width: 100%;
+    padding: 4px 0;
+    margin: 3px 0;
+    
+}
+
+.pager a {
+  
+    padding: 3px 6px; 
+    margin: 0 6px 0 0;
+    border: 1px solid #c2c2c2;
+}
+
+.pager a.active, .pager a:hover {
+    background: #c2c2c2;
+}
+
+.clear {
+    clear:both;
+}
