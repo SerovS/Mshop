@@ -171,6 +171,26 @@ $sql = "INSERT INTO " . $this->modx->getFullTableName('site_snippets') . "
 $result = $this->modx->db->query($sql);
 if ($result)
     $res[] = 'Снипет MShopCatalog установлен';
+$sql = "INSERT INTO " . $this->modx->getFullTableName('site_snippets') . "
+            (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`, `properties`, `moduleguid`) 
+            VALUES ('MShopMenu', '', 0, 0, 0, '\r\nrequire MODX_BASE_PATH.\"assets/modules/shop/MShopMenu.php\";\r\n', 0, '', ' ');";
+$result = $this->modx->db->query($sql);
+if ($result)
+    $res[] = 'Снипет MShopMenu установлен';
+
+$sql = "INSERT INTO " . $this->modx->getFullTableName('site_snippets') . "
+            (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`, `properties`, `moduleguid`) 
+            VALUES ('MShopOrder', '', 0, 0, 0, '\r\nrequire MODX_BASE_PATH.\"assets/modules/shop/MShopOrder.php\";\r\n', 0, '', ' ');";
+$result = $this->modx->db->query($sql);
+if ($result)
+    $res[] = 'Снипет MShopOrder установлен';
+
+$sql = "INSERT INTO " . $this->modx->getFullTableName('site_snippets') . "
+            (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`, `properties`, `moduleguid`) 
+            VALUES ('MShopBreadcrumbs', '', 0, 0, 0, '\r\nrequire MODX_BASE_PATH.\"assets/modules/shop/MShopBreadcrumbs.php\";\r\n', 0, '', ' ');";
+$result = $this->modx->db->query($sql);
+if ($result)
+    $res[] = 'Снипет MShopBreadcrumbs установлен';
 
 $sql = "INSERT INTO " . $this->modx->getFullTableName('site_plugins') . " (`name`, `description`, `editor_type`, `category`, `cache_type`, `plugincode`, `locked`, `properties`, `disabled`, `moduleguid`) VALUES
                 ('MShop', '', 0, 0, 0, 'require_once MODX_BASE_PATH.\"assets/modules/shop/plugin.php\";', 0, '', 0, ' ');";

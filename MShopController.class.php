@@ -33,7 +33,7 @@ class MShopController {
     }
 
     public function run() {
-        $modx->invokeEvent("OnMShopControllerRun");
+        $this->model->modx->invokeEvent("OnMShopControllerRun");
 
         $content = '';
         $content .= '<div class="dynamic-tab-pane-control">';
