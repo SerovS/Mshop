@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class MShopController
  * Изначальная инициализация модулей. Переключение страниц в модуле (back).
@@ -14,9 +15,8 @@ require_once(dirname(__FILE__) . '/views/MShopImport.view.php');
 
 class MShopController {
 
-    private $path; // путь до модуля
-    private $moduleTitle = 'MODx магазин';
-    private $tabs = array(
+    public $moduleTitle = 'MODx магазин';
+    public $tabs = array(
         'MShopCatalog' => 'Каталог',
         'MShopBrandView' => 'Бренды',
         'MShopOrderView' => 'Заказы',
@@ -24,22 +24,26 @@ class MShopController {
         'MShopConfig' => 'Настройки',
         'MShopImport' => 'Импорт',
     );
+    public $runs = '';
     private static $msgCount = 0;
     public $model;
 
-    public function __construct($path, $modx) {
-        $this->path = $path;
-        $this->model = new MShopModel($modx);        
+    public function __construct($path = false, $modx) {
+        $this->model = new MShopModel($modx);
     }
 
     public function run() {
-        $this->model->modx->invokeEvent("OnMShopControllerRun");
+
+        $params = $this->model->modx->invokeEvent("OnMShopControllerRun");
+        $param = unserialize($params[0]);
+        if (is_array($param) && !empty($param))
+            $this->setParams($param);
 
         $content = '';
         $content .= '<div class="dynamic-tab-pane-control">';
         $content .= $this->buildMenu($_GET['view']);
         $content .= '<div class="tab-page">';
-
+        $content .= $this->runs;
 
         if ($_GET['view'] == 'MShopCatalog') {
             $model = new MShopCatalog($this->model);
@@ -64,7 +68,7 @@ class MShopController {
                  <div class="sectionBody">';
             $content .= $this->model->runInstall();
             $content .='</div>';
-        } else {
+        } elseif (empty($this->runs)) {
             $content .= $this->viewSplash();
         }
         $content .= '</div></div>';
@@ -258,6 +262,12 @@ class MShopController {
                     '<div class="msg"><h2>' . $title . '</h2><p>' . $msg . '</p></div>' .
                     '<a href="#" onclick="$(\'EP_message_' . self::$msgCount . '\').remove(); return false;"' .
                     ' class="messageclose"><span>X</span></a></div><br clear="all"/>';
+        }
+    }
+
+    public function setParams($param) {
+        foreach ($param as $name => $value) {
+            $this->$name = $value;
         }
     }
 
