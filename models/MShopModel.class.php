@@ -49,7 +49,10 @@ Class MShopModel {
         if (isset($_GET[$this->get_catalog]) && is_numeric($_GET[$this->get_catalog]))
             $this->current_page = $_GET[$this->get_catalog];
 
-        $modx->invokeEvent("OnMShopModelInit");
+        $params = $modx->invokeEvent("OnMShopModelInit");
+        $param = unserialize($params[0]);
+        if (is_array($param) && !empty($param))
+            $this->setParams($param);
     }
 
     /**
@@ -327,6 +330,16 @@ Class MShopModel {
         $res = array();
         require_once(dirname(__FILE__) . '/install.php');
         return implode('<br/>', $res);
+    }
+    
+    /**
+     * Устанавливает дополнительные атрибуты
+     * @param array $param массив атрибутов
+     */
+    public function setParams($param) {
+        foreach ($param as $name => $value) {
+            $this->$name = $value;
+        }
     }
 
 }
