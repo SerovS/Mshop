@@ -84,7 +84,8 @@ class MShopVariant {
         $res['stock'] = $this->modx->db->escape($arr['stock']);
         $res['position'] = isset($arr['position']) ? $arr['position'] : 1;
         $res['unit'] = isset($arr['unit']) ? $arr['unit'] : 'шт';
-        $res['id_external'] = isset($arr['id_external']) ? $arr['id_external'] : '0';
+        if (isset($arr['id_external']))
+            $res['id_external'] = $arr['id_external'];
         return $res;
     }
 

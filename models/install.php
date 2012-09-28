@@ -224,12 +224,15 @@ if ($result) {
 
 
 $sql = "INSERT INTO " . $this->modx->getFullTableName('site_htmlsnippets') . " (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`) VALUES
-( 'cart_tpl', '', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<form class="mshop_cart" action="/assets/modules/shop/ajax.php" method="POST">\r\n<input type="hidden" name="MShop_action" value="add">\r\n<table>\r\n<tr>\r\n<th>Наиименование</th>\r\n<th>Кол-во</th>\r\n<th>Цена</th>\r\n<th></th>\r\n</tr>\r\n[+products_html+]\r\n<tr>\r\n<td colspan="2">На сумму:</td>\r\n<td colspan="2">[+total+]</td>\r\n</tr>\r\n</table>\r\n  <input type="submit" value="пересчитать">\r\n</form>\r\n\r\n\r\n</div>' . "', 0),
-( 'products_tpl', '', 0, 0, 0, '" . '<tr>\r\n<td><a href="">[+pagetitle+] ([+name+] [+article+])</a> ([+id_variant+])</td>\r\n<td><input type="text" value="[+count+]" name="MShop_variant[[+id_variant+]]" onChange="addCart(this, [+id_variant+], this.value)"></td>\r\n<td>[+price+]</td>\r\n<td><a href="javascript:;" onClick="deleteCart(this, [+id_variant+]);">Удалить</a></td>\r\n</tr>' . "', 0),
-( 'empty_cart_tpl', '', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<p>Корзина пуста</p>\r\n\r\n</div>' . "', 0);";
+( 'cart_tpl', 'расширенный код корзины при оформлении заказа', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<form class="mshop_cart" action="/assets/modules/shop/ajax.php" method="POST">\r\n<input type="hidden" name="MShop_action" value="add">\r\n<table>\r\n<tr>\r\n<th>Наиименование</th>\r\n<th>Кол-во</th>\r\n<th>Цена</th>\r\n<th></th>\r\n</tr>\r\n[+products_html+]\r\n<tr>\r\n<td colspan="2">На сумму:</td>\r\n<td colspan="2">[+total+]</td>\r\n</tr>\r\n</table>\r\n  <input type="submit" value="пересчитать">\r\n</form>\r\n\r\n\r\n</div>' . "', 0),
+( 'products_tpl', 'код для одной строки в корзине', 0, 0, 0, '" . '<tr>\r\n<td><a href="">[+pagetitle+] ([+name+] [+article+])</a> ([+id_variant+])</td>\r\n<td><input type="text" value="[+count+]" name="MShop_variant[[+id_variant+]]" onChange="addCart(this, [+id_variant+], this.value)"></td>\r\n<td>[+price+]</td>\r\n<td><a href="javascript:;" onClick="deleteCart(this, [+id_variant+]);">Удалить</a></td>\r\n</tr>' . "', 0),
+( 'min_cart_tpl', 'код для минимальной корзины', 0, 0, 0, '" . '<p>\r\n<strong class="blue">Корзина</strong>\r\n</p>\r\n[+products_html+]\r\nтовара на сумму\r\n<p>\r\n<strong class="blue">\r\n[+total+] рублей\r\n</strong>\r\n</p>\r\n<form>\r\n<button class="bluebutton rounded" formaction="/11">Оформить заказ</button>\r\n</form>' . "', 0),
+( 'min_products_tpl', 'код одной строки товара для минимальной корзины', 0, 0, 0, '" . '<a href="[+url+]">[+pagetitle+]</a> - [+price+] [+count+]шт.\r\n<br/><br/>' . "', 0),
+( 'empty_cart_tpl', 'код пустой корзины', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<p>Корзина пуста</p>\r\n\r\n</div>' . "', 0);";
+
 $result = $this->modx->db->query($sql);
 if ($result)
-    $res[] = 'Чанки cart_tpl,products_tpl,empty_cart_tpl установлены';
+    $res[] = 'Чанки cart_tpl,products_tpl,empty_cart_tpl, min_products_tpl, min_cart_tpl установлены';
 
 $sql = "INSERT INTO " . $this->modx->getFullTableName('system_eventnames') . "  (
 `id` ,`name` ,`service` ,`groupname`)
