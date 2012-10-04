@@ -68,10 +68,15 @@ class MShopController {
                  <div class="sectionBody">';
             $content .= $this->model->runInstall();
             $content .='</div>';
+        } elseif ($_GET['view'] == 'MShopHelp') {
+            $content .= '<div class="sectionHeader">Помощь</div>
+                 <div class="sectionBody">';
+            $content .= $this->viewHelp();
+            $content .='</div>';
         } elseif (empty($this->runs)) {
             $content .= $this->viewSplash();
         }
-        $content .= '</div></div>';
+        $content .= '<a href="' . MShopController::getURL(array('view' => 'MShopHelp')) . '">помощь</a></div></div>';
 
         $tpl = $this->getMainTemplate();
         $tpl = str_replace('[*content*]', $content, $tpl);
@@ -201,6 +206,19 @@ class MShopController {
             $res.=$this->installPage();
 
         $res.='</div>';
+        return $res;
+    }
+
+    private function viewHelp() {
+        $res.='<h3>Установка и настройка</h3>';
+        $res.='1. Создайте документ который будет родителем для всего каталога. Этот документ будет называтся <b>Точка входа</b><br/>';
+        $res.='2. Создайте три шаблона: для товара, для категории (списка товаров), для бренда (если вам это надо)<br/>';
+        $res.='3. Зайдите на вкладку настройка и пропишите ID шаблонов<br/>';
+        $res.='4. В настройках провертье параметр - URL префикс. Поумолчнию он равен: <i>catalog</i>. Измените его если это необходимо.<br/>';
+        $res.='5. В фаил .htaccess вставте строку: RewriteRule ^<i>catalog</i>/([^/]+)?$ index.php?q=<b>Точка входа</b>&mshop_id=$1 [L,QSA] <b>Вставлять перед строкой: RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]</b><br/>';
+        $res.='6. Вывод списка товаров: [!MShopCatalog?tpl=`catalog_product_tpl`&parent=`[*id*]`&depth=`2`&limit=`10`&order=`content.menuindex DESC`!]<br/>';
+        $res.='7. Для добавления товаров в корзину на странице обязательно должен присутвовать чанк корзины. Вызов чанка: [!MShopCart?cart_tpl=`min_cart_tpl`&products_tpl=`min_products_tpl`!]<br/>';
+        $res.='<br><br>Еще больше документации на официальном сайте: <a href="http://mshop.rfweb.su/doc">http://mshop.rfweb.su/doc</a><br><br><br><br>';
         return $res;
     }
 

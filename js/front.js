@@ -104,4 +104,59 @@ function emptyF(data) {
     
 }
 
+/**
+ * Добавление товара через хелпер
+ * id_var ID варианта товара.
+ * count количество
+ */
+function addCartHelper(id_var, count) { 
+    
+    params = "&MShop_variant="+id_var+"&MShop_count="+count;    
+    toAjax("ajax=MShop&MShop_action=add"+params, "refreshCart(1)");
+}
+
+/**
+*  Установка первоночальных значений хелпера
+*
+*/
+function setNull(){				
+    $('input[name="count"]').attr('value',1);
+}
+
+function hideHelper(){
+    $('#MShopHelper').hide(); 
+    setNull();
+}
+
+
+function downHelper(){
+    var cur_value = $('input[name="count"]').attr('value');
+    if(cur_value!=1)
+    {
+        cur_value = parseInt(cur_value) - 1;
+        $('input[name="count"]').attr('value',cur_value);
+    }
+    return false;
+}
+
+function upHelper(){
+    var cur_value = $('input[name="count"]').attr('value');
+    cur_value = parseInt(cur_value) + 1;
+    $('input[name="count"]').attr('value',cur_value); 
+    return false;
+}
+
+function sendHelper(obj){
+    var cou=$('#MShop_count').attr('value');	
+    addCart(obj, false, cou);
+    $(obj).parents('form').append($('#MShopHelper2'));	
+    $('#MShopHelper2').show();
+    hideHelper();
+    return false;
+}
+
+function hideHelper2() {
+    $("#MShopHelper2").hide(); 
+}
+
 

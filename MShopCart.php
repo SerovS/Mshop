@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Снипет выводящий корзину. Один из основных
  * @author SerovAlexander <serov.sh@gmail.com>
@@ -13,6 +14,7 @@ $config['products_tpl'] = isset($products_tpl) ? $products_tpl : 'products_tpl';
 $config['empty_cart_tpl'] = isset($empty_cart_tpl) ? $empty_cart_tpl : 'empty_cart_tpl';
 $config['site_url'] = isset($site_url) ? $site_url : $modx->config['site_url'];
 $config['get_cart_html'] = isset($get_cart_html) ? $get_cart_html : 1;
+$config['helper'] = isset($helper) ? $helper : false;
 
 require_once MODX_BASE_PATH . 'assets/modules/shop/models/MShopModel.class.php';
 $mshop = new MShopModel($modx);
@@ -26,14 +28,17 @@ echo '
     var mshop_id="' . $config['id'] . '";
     </script>
     <script type="text/javascript" src="/assets/modules/shop/js/front.js"></script>';
-    $modx->invokeEvent("OnMShopCartFrontInit");
-    
+if ($config['helper'])
+    echo $modx->getChunk($config['helper']);
+
+$modx->invokeEvent("OnMShopCartFrontInit");
+
 try {
-    $result = $mshop->getCartInfo();    
+    $result = $mshop->getCartInfo();
     if ($config['get_cart_html'] == 1 && $mshop->validString($config['cart_tpl']) && $mshop->validString($config['products_tpl']))
         $html = $mshop->getCartHtml($result, $config['cart_tpl'], $config['products_tpl'], $config['empty_cart_tpl']);
 
-    echo '<div id="'.$config['id'].'">' . $html . '</div>';
+    echo '<div id="' . $config['id'] . '">' . $html . '</div>';
 } catch (Exception $e) {
     echo $e->getMessage();
 }
