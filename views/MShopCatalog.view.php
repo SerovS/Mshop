@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Показ кталога продукции
  * @author SerovAlexander <serov.sh@gmail.com>
@@ -53,8 +54,8 @@ Class MShopCatalog {
         return $res;
     }
 
-    public function getCatalogUrl($doc, $mshop_start=false) {        
-        return MShopController::getURL(array('mshop_pid' => $doc['id'], 'mshop_start'=>$mshop_start));
+    public function getCatalogUrl($doc, $mshop_start = false) {
+        return MShopController::getURL(array('mshop_pid' => $doc['id'], 'mshop_start' => $mshop_start));
     }
 
     public function getRemoveUrl($doc) {
@@ -62,10 +63,10 @@ Class MShopCatalog {
     }
 
     public function getEditUrl($doc) {
-        if($this->model->document->isCategory($doc))
-            $template = $this->model->category_template;
+        if (is_array($this->model->product_template))
+            $current_template = current($this->model->product_template);
         else
-            $template = $this->model->product_template;
+            $current_template = $this->model->product_template;
         return MShopController::getURL(
                         array(
                             'mshop_id' => $doc['id'],
@@ -75,7 +76,7 @@ Class MShopCatalog {
                             'last_a' => $_GET['a'],
                             'last_id' => $_GET['id'],
                             'last_view' => $_GET['view'],
-                            'mshop_template' => $template
+                            'mshop_template' => $current_template
                         )
         );
     }
@@ -100,16 +101,20 @@ Class MShopCatalog {
 
         //$str.='d.add(0,-1," корень","url", "title", "addN()");' . "\n\r";
         $start = isset($_GET['mshop_start']) ? $_GET['mshop_start'] : 0;
+        if (is_array($this->model->product_template)) {
+            foreach ($this->model->product_template as $t)
+                $templates[] = $t;
+        }else
+            $templates[] = $this->model->product_template;
+        if (is_array($this->model->category_template)) {
+            foreach ($this->model->category_template as $t)
+                $templates[] = $t;
+        }else
+            $templates[] = $this->model->category_template;
+
+
         $docs = $this->model->document->getDocuments(
-                false, $_GET['mshop_pid'], array(
-            $this->model->category_template,
-            $this->model->product_template
-                ), 
-                false,
-                $this->model->limit, 
-                $start,
-                false,
-                true
+                false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, true
         );
         foreach ($docs as $doc) {
             if ($this->model->document->isProduct($doc)) {
@@ -140,11 +145,7 @@ Class MShopCatalog {
         }
         $res .= '</table>';
         $res.='<div class="pager">' . $this->model->getPager($this->model->document->getCount(
-                false, 
-                $_GET['mshop_pid'], 
-                array(
-            $this->model->category_template,
-            $this->model->product_template)), $this->model->limit, $start) . '</div>';
+                                false, $_GET['mshop_pid'], $tempaltes), $this->model->limit, $start) . '</div>';
         /*
           $res.='<link rel="stylesheet" type="text/css" href="../assets/modules/shop/css/dtree.css" media="all" />
           <script type="text/javascript" src="../assets/modules/shop/js/dtree.js"></script>

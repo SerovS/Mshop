@@ -44,8 +44,10 @@ class MShopDocument {
                 $where .= ' and content.parent=\'' . $parent . '\'';
             if (is_array($parent))
                 $where .= ' and content.parent in (' . implode(',', $parent) . ')';
-            if ($template)
+            if (is_array($template))
                 $where .= ' and content.template in (' . implode(',', $template) . ')';
+            if (is_numeric($template))
+                $where .= ' and content.template in (' .intval($template) . ')';
         }
         if (is_array($tvs)) {
             foreach ($tvs as $tv) {
@@ -102,8 +104,10 @@ class MShopDocument {
                 $where .= ' and content.parent=\'' . $parent . '\'';
             if (is_array($parent))
                 $where .= ' and content.parent in (' . implode(',', $parent) . ')';
-            if ($template)
+            if (is_array($template))
                 $where .= ' and content.template in (' . implode(',', $template) . ')';
+            if (is_numeric($template))
+                $where .= ' and content.template in (' .intval($template) . ')';
         }
 
         $sql = 'select count(*) as count
@@ -298,17 +302,23 @@ class MShopDocument {
     public function isBrand($doc) {
         if ($doc['template'] == $this->model->brand_template)
             return true;
+        if (is_array($this->model->brand_template) && in_array($doc['template'], $this->model->brand_template))
+            return true;
         return false;
     }
 
     public function isCategory($doc) {
         if ($doc['template'] == $this->model->category_template)
             return true;
+        if (is_array($this->model->category_template) && in_array($doc['template'], $this->model->category_template))
+            return true;
         return false;
     }
 
     public function isProduct($doc) {
         if ($doc['template'] == $this->model->product_template)
+            return true;
+        if (is_array($this->model->product_template) && in_array($doc['template'], $this->model->product_template))
             return true;
         return false;
     }
@@ -331,12 +341,12 @@ class MShopDocument {
      * @return string 
      */
     public function makeFrontUrl($doc) {
-        
+
         $link = $doc['id'];
         if (!empty($doc['alias']))
             $link = $doc['alias'];
 
-        
+
         if ($this->isProduct($doc))
             return $this->makeProductUrl($link);
         if ($this->isCategory($doc))

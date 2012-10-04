@@ -44,6 +44,8 @@ Class MShopConfig {
         $this->output.= '<form method="POST">';
         $this->output.= '<table>';
         foreach ($this->model->getConfig() as $key => $conf) {
+            if(is_array($conf[0]))
+                $conf[0] = implode(',',$conf[0]);
             $this->output.= '<tr><td>' . $conf[1] . '</td><td><input type="text" value="' . $conf[0] . '" name="Config[' . $key . ']" style="width:300px;"></td></tr>';
         }
         $this->output.='<tr><td></td><td><input type="submit" value="Сохранить" name="save"></td></tr>';

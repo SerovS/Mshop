@@ -99,7 +99,11 @@ switch ($e->name) {
                 $doc['pagetitle'] = $doc['longtitle'] = $doc['content'] = $doc['introtext'] = $doc['alias'] = '';
                 $doc['richtext'] = 1;
             }
-            $doc['template'] = isset($_GET['mshop_template']) ? $_GET['mshop_template'] : $mshop->category_template;
+            if (is_array($mshop->category_template))
+                $current_template = current($mshop->category_template);
+            else
+                $current_template = $mshop->category_template;
+            $doc['template'] = isset($_GET['mshop_template']) ? $_GET['mshop_template'] : $current_template;
 
             $content = array_merge($content, $doc); //подменяем значениями из таблицы mshop
             //устанавливаем пременную mshop_parent. Родитель в таблице mshop
