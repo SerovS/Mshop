@@ -239,7 +239,6 @@ Class MShopModel {
             throw new Exception('Чанк продукта в корзине не определен', 0); //lang
         if ($empty_cart_tpl == false || $empty_cart_tpl == 'default')
             throw new Exception('Чанк пустой корзины не определен', 0); //lang
-
         $result['products_html'] = '';
         if (is_array($result['products']) && !empty($result['products'])) {
             foreach ($result['products'] as $product) {

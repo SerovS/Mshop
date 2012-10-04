@@ -1,11 +1,11 @@
 <?php
+
 /**
  * Плагин отвечает за вывод документов во фронт. 
  * Сохранение документов в таблицы mshop. 
  * Добавление полей при редактировании документов.
  * @author SerovAlexander <serov.sh@gmail.com>
  */
-
 $e = &$modx->Event;
 $output = '';
 
@@ -14,12 +14,18 @@ switch ($e->name) {
     case 'OnLoadWebDocument':
         require_once MODX_BASE_PATH . 'assets/modules/shop/models/MShopModel.class.php';
         $mshop = new MShopModel($modx);
-        
-        if (($_GET[$mshop->get_catalog]) && is_numeric($_GET[$mshop->get_catalog])) {
+        $id_mshop = false;
+        if (is_string($_GET[$mshop->get_catalog]))
+            $id_mshop = $mshop->document->getIdDocumentByAlias($_GET[$mshop->get_catalog]);
+
+        if (($_GET[$mshop->get_catalog]) && is_numeric($_GET[$mshop->get_catalog]))
+            $id_mshop = $_GET[$mshop->get_catalog];
 
 
-            $doc = $mshop->document->getDocuments($_GET[$mshop->get_catalog]);
-            $doc = $doc[$_GET[$mshop->get_catalog]];
+        if ($id_mshop) {
+
+            $doc = $mshop->document->getDocuments($id_mshop);
+            $doc = $doc[$id_mshop];
 
             $option = '';
             if (empty($doc))
@@ -33,7 +39,7 @@ switch ($e->name) {
             $modx->documentObject = array_merge($modx->documentObject, $doc);
             $tvs = $mshop->document->getTVs($doc);
             $modx->documentObject = array_merge($modx->documentObject, $tvs);
-        }        
+        }
         break;
 
 #######################################################
@@ -90,7 +96,8 @@ switch ($e->name) {
                 $doc['mshop_properies'] = $mshop->document->getProperties($_REQUEST['mshop_id']);
                 $output .= '<input type="hidden" value="' . $_REQUEST['mshop_id'] . '" name="mshop_id">';
             } else {
-                $doc['pagetitle'] = $doc['longtitle'] = $doc['content'] = $doc['introtext'] = '';
+                $doc['pagetitle'] = $doc['longtitle'] = $doc['content'] = $doc['introtext'] = $doc['alias'] = '';
+                $doc['richtext'] = 1;
             }
             $doc['template'] = isset($_GET['mshop_template']) ? $_GET['mshop_template'] : $mshop->category_template;
 

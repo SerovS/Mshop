@@ -331,12 +331,18 @@ class MShopDocument {
      * @return string 
      */
     public function makeFrontUrl($doc) {
+        
+        $link = $doc['id'];
+        if (!empty($doc['alias']))
+            $link = $doc['alias'];
+
+        
         if ($this->isProduct($doc))
-            return $this->makeProductUrl($doc['id']);
+            return $this->makeProductUrl($link);
         if ($this->isCategory($doc))
-            return $this->makeCategoryUrl($doc['id']);
+            return $this->makeCategoryUrl($link);
         if ($this->isBrand($doc))
-            return $this->makeBrandUrl($doc['id']);
+            return $this->makeBrandUrl($link);
     }
 
     /**
@@ -489,6 +495,19 @@ class MShopDocument {
         }
         //print_r($res);
         return $res;
+    }
+
+    public function getIdDocumentByAlias($alias) {
+        $alias = $this->modx->db->escape($alias);
+        $sql = 'select id from ' . $this->modx->getFullTableName(MShopModel::CONTENT) . ' 
+                  where alias = \'' . $alias . '\'';
+        //echo $sql;
+        $output = array();
+        $result = $this->modx->db->query($sql);
+        while ($row = $this->modx->db->getRow($result)) {
+            return $row['id'];
+        }
+        return false;
     }
 
 }

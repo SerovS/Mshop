@@ -107,7 +107,7 @@ class MShopVariant {
         while ($row = $this->modx->db->getRow($result)) {
             $output[$row['id_variant']] = $row;
             $output[$row['id_variant']]['price'] = $this->setPrice($row['price']);
-            $output[$row['id_variant']]['url'] = $this->model->document->makeProductUrl($row['id']);
+            $output[$row['id_variant']]['url'] = $this->model->document->makeFrontUrl($row);
         }
 
         return $output;

@@ -29,7 +29,7 @@ echo '
     $modx->invokeEvent("OnMShopCartFrontInit");
     
 try {
-    $result = $mshop->getCartInfo();
+    $result = $mshop->getCartInfo();    
     if ($config['get_cart_html'] == 1 && $mshop->validString($config['cart_tpl']) && $mshop->validString($config['products_tpl']))
         $html = $mshop->getCartHtml($result, $config['cart_tpl'], $config['products_tpl'], $config['empty_cart_tpl']);
 
