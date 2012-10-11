@@ -28,8 +28,6 @@ class MShopDocument {
      */
     public function getDocuments($id = false, $parent = false, $template = false, $order = false, $limit = 30, $start = 0, $tvs = false, $group = false, $where = false) {
 
-        if (!isset($parent) || empty($parent))
-            $parent = 0;
 
         $output = array();
         $left = $select = '';
@@ -73,7 +71,7 @@ class MShopDocument {
                   left outer join ' . $this->modx->getFullTableName(MShopModel::VARIANT) . ' as variant on (content.id = variant.id_content) 
                       ' . $left . '
                   where 1=1 ' . $where . '  ' . $groupby . $order . $lim;
-        // echo $sql;
+       // echo $sql;
         $result = $this->modx->db->query($sql);
         while ($row = $this->modx->db->getRow($result)) {
             $output[$row['id']] = $row;
@@ -90,9 +88,7 @@ class MShopDocument {
         return $output;
     }
 
-    public function getCount($id = false, $parent = false, $template = false) {
-        if (!isset($parent) || empty($parent))
-            $parent = 0;
+    public function getCount($id = false, $parent = false, $template = false) {                    
 
         $where = '';
         if (is_numeric($id))

@@ -63,10 +63,6 @@ Class MShopCatalog {
     }
 
     public function getEditUrl($doc) {
-        if (is_array($this->model->product_template))
-            $current_template = current($this->model->product_template);
-        else
-            $current_template = $this->model->product_template;
         return MShopController::getURL(
                         array(
                             'mshop_id' => $doc['id'],
@@ -75,14 +71,13 @@ Class MShopCatalog {
                             'id' => $this->model->start_page,
                             'last_a' => $_GET['a'],
                             'last_id' => $_GET['id'],
-                            'last_view' => $_GET['view'],
-                            'mshop_template' => $current_template
+                            'last_view' => $_GET['view']                        
                         )
         );
     }
 
     public function render() {
-        $res = '<a href="' . $this->getEditUrl(array('id' => 'new')) . '">Новый документ</a> <br/>';
+        $res = '<a href="' . $this->getEditUrl(array('id' => 'new')) . '&mshop_template='.$this->model->getCurrentCategoryTemplate().'">Новый документ</a> <br/>';
         $res .= '<p>Путь: ' . $this->getBreadcrumbs() . '</p>';
 
         $res .= '<table class="zebra" width="100%" cellspacing="0" cellpadding="0">
@@ -112,7 +107,8 @@ Class MShopCatalog {
         }else
             $templates[] = $this->model->category_template;
 
-
+        if (!isset($_GET['mshop_pid']))
+            $_GET['mshop_pid'] = 0;
         $docs = $this->model->document->getDocuments(
                 false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, true
         );

@@ -11,11 +11,10 @@ $config['id'] = isset($id) ? $id : 'MShop_catalog';
 $config['tpl'] = isset($tpl) ? $tpl : false;
 $config['depth'] = isset($depth) ? $depth : 1;
 $config['pages'] = isset($pages) ? $pages : 1;
-$config['parent'] = isset($parent) ? $parent : false;
+$config['parent'] = isset($parent) ? $parent : 0;
 $config['template'] = isset($template) ? explode(',', $template) : false;
 $config['order'] = isset($order) ? $order : false;
 $config['limit'] = isset($limit) && is_numeric($limit) ? $limit : 15;
-$config['parent'] = array($parent => $parent);
 $config['tvs'] = isset($tvs) ? explode(',', $tvs) : false;
 $config['where'] = isset($where) ? $where : false;
 
@@ -25,6 +24,7 @@ $mshop = new MShopModel($modx);
 
 
 if ($config['depth'] > 1) {
+    $config['parent'] = array($parent => $parent);
     for ($i = 1; $i < $config['depth']; $i++) {
         $add = $mshop->document->getChildsId($config['parent']);
         $config['parent'] = array_merge($config['parent'], $add);
@@ -35,7 +35,7 @@ try {
     $start = 0;
     if (isset($_GET[$config['id'] . '_start']) && is_numeric($_GET[$config['id'] . '_start']) && $_GET[$config['id'] . '_start'] > 0)
         $start = intval($_GET[$config['id'] . '_start']);
-    $docs = $mshop->document->getDocuments(false, $config['parent'], $config['template'], $config['order'], $config['limit'], $start, $config['tvs'], true, $config['where']);
+    $docs = $mshop->document->getDocuments(false, $config['parent'], $config['template'], $config['order'], $config['limit'], $start, $config['tvs'], false, $config['where']);
 
     if ($config['pages'] == 1) {
         $count = $mshop->document->getCount(false, $config['parent'], $config['template']);

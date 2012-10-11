@@ -36,7 +36,7 @@ Class MShopModel {
         require_once(dirname(__FILE__) . '/MShopOrder.class.php');
 
         $this->modx = $modx;
-        
+
         foreach ($this->getConfig() as $name => $value)
             $this->$name = $value[0];
 
@@ -134,12 +134,12 @@ Class MShopModel {
      * Устанавливаем значение конфигурации для модуля.
      * @param <array> $arr массив значений
      */
-    public function setConfig($arr) {        
+    public function setConfig($arr) {
         foreach ($arr as $name => $value) {
             if (is_array($value))
                 $this->config[$name] = $value;
-            elseif(stripos($value, ','))
-                $this->config[$name][0] = explode(',',$value);
+            elseif (stripos($value, ','))
+                $this->config[$name][0] = explode(',', $value);
             else
                 $this->config[$name][0] = $value;
         }
@@ -333,7 +333,7 @@ Class MShopModel {
         require_once(dirname(__FILE__) . '/install.php');
         return implode('<br/>', $res);
     }
-    
+
     /**
      * Устанавливает дополнительные атрибуты
      * @param array $param массив атрибутов
@@ -342,6 +342,13 @@ Class MShopModel {
         foreach ($param as $name => $value) {
             $this->$name = $value;
         }
+    }
+
+    public function getCurrentCategoryTemplate() {
+        if (is_array($this->category_template))
+            return $this->category_template[0];
+        else
+            return $this->category_template;
     }
 
 }
