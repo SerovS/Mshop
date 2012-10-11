@@ -314,9 +314,9 @@ Class MShopModel {
      * @return boolean 
      */
     public function isInstall() {
-        $sql = 'SELECT count(*) as count FROM information_schema.tables WHERE table_name = \'' . $this->modx->db->config['table_prefix'] . self::CONTENT . '\'';
+        $sql = 'SELECT count(*) as count FROM information_schema.tables WHERE table_name = \'' . $this->modx->db->config['table_prefix'] . self::CONTENT . '\' and TABLE_SCHEMA = '.$this->modx->db->config['dbase'].'';
         $result = $this->modx->db->query($sql);
-        $row = $this->modx->db->getRow($result);
+        $row = $this->modx->db->getRow($result);        
         if ($row['count'] == 1)
             return true;
         return false;
