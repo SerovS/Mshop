@@ -89,9 +89,12 @@ function toAjax(params, successFunction) {
 
 function getParams(obj) {
     var params = "";   
-    $(obj).parents("form").children('input').each(function() {
+    $(obj).parents("form").find('input').each(function() {
         params = params + "&" + $(this).attr("name") +"="+ $(this).val() + "";        
     });
+    $(obj).parents("form").find('select').each(function() {
+        params = params + "&" + $(this).attr("name") +"="+ $(this).val() + "";        
+    });    
     return params;
 }
 

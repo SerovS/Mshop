@@ -314,10 +314,14 @@ Class MShopModel {
      * @return boolean 
      */
     public function isInstall() {
-        $sql = 'SELECT count(*) as count FROM information_schema.tables WHERE table_name = \'' . $this->modx->db->config['table_prefix'] . self::CONTENT . '\' and TABLE_SCHEMA = '.$this->modx->db->config['dbase'].'';
+        $sql = 'SHOW TABLE STATUS FROM '.$this->modx->db->config['dbase'].' where name like \'%mshop_content%\'';
+        
         $result = $this->modx->db->query($sql);
-        $row = $this->modx->db->getRow($result);        
-        if ($row['count'] == 1)
+        
+        $row = $this->modx->db->getRow($result);
+        
+        
+        if (strpos($row['Name'], self::CONTENT))
             return true;
         return false;
     }

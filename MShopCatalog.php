@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Снипет выводящий товары. Один из основных. Аналог Ditto только для товаров mshop.
  * @author SerovAlexander <serov.sh@gmail.com>
@@ -7,16 +8,18 @@
  * Более подробная информация на сайте: http://mshop.rfweb.su/doc
  */
 $config = array();
-$config['id'] = isset($id) ? $id : 'MShop_catalog';
-$config['tpl'] = isset($tpl) ? $tpl : false;
-$config['depth'] = isset($depth) ? $depth : 1;
-$config['pages'] = isset($pages) ? $pages : 1;
-$config['parent'] = isset($parent) ? $parent : 0;
-$config['template'] = isset($template) ? explode(',', $template) : false;
-$config['order'] = isset($order) ? $order : false;
-$config['limit'] = isset($limit) && is_numeric($limit) ? $limit : 15;
-$config['tvs'] = isset($tvs) ? explode(',', $tvs) : false;
-$config['where'] = isset($where) ? $where : false;
+$config['id'] = isset($id) ? $id : 'MShop_catalog'; // ID снипета, применяется для вывода нескольких снипетов на странице
+$config['tpl'] = isset($tpl) ? $tpl : false; // Название чанка шаблона для вывода элементов. Аналог Дитто
+$config['tpl_variant'] = isset($tpl_variant) ? $tpl_variant : false; // Чанк для вывода вариантов товара. Возможные переменные для варианта: name, article, price, stock, unit
+$config['depth'] = isset($depth) ? $depth : 1; // глубина уровней каталога
+$config['pages'] = isset($pages) ? $pages : 1; // нужна ли пагинация. Вывод страниц каталога: [*MShop_catalog_page*]
+$config['parent'] = isset($parent) ? $parent : 0; // ID родительского элемента каталога
+$config['template'] = isset($template) ? explode(',', $template) : false; // Можно отфильтровать по шаблону
+$config['order'] = isset($order) ? $order : false; // способ сортировки. Например content.menuindex DESC
+$config['limit'] = isset($limit) && is_numeric($limit) ? $limit : 15; //Кол-во элементов на странице
+$config['tvs'] = isset($tvs) ? explode(',', $tvs) : false; // ID tv параметров для более экономного вызова. Вызов идет в одном запросе. Вывод параметра: [+tv1+]
+$config['where'] = isset($where) ? $where : false; // Дополнительные условя для sql запроса. Например для вывода 1 товара:   and content.id in (5) Обязательно начинать с and
+$config['gettv'] = isset($gettv) ? $gettv : true; // Включить\Выключить подстановку TV параметров отдельным запросом
 
 require_once MODX_BASE_PATH . 'assets/modules/shop/models/MShopModel.class.php';
 $mshop = new MShopModel($modx);
@@ -44,14 +47,29 @@ try {
         $modx->setPlaceholder($config['id'] . '_page', $pager);
     }
     $str = '';
+    
+    if ($config['gettv'] === true) {
+        $par = $mshop->document->getTvParams();
+    }
 
     foreach ($docs as $doc) {
+        if ($config['gettv'] === true && is_array($par[$doc['id']])) {
+            foreach ($par[$doc['id']] as $name => $value)
+                $doc[$name] = $value;
+        }
         $option = '';
         foreach ($doc['variants'] as $id => $var) {
-            $option.='<option value="' . $id . '" ' . $selected . '>' . $var['article'] . ' - ' . $var['price'] . '</option>';
+            if ($config['tpl_variant']) {
+                $var['id_variant'] = $id;
+                $option .= $modx->parseChunk($config['tpl_variant'], $var, '[+', '+]');
+            }else
+                $option.='<option value="' . $id . '" ' . $selected . '>' . $var['article'] . ' - ' . $var['price'] . '</option>';
         }
-        $doc['variants'] = '<select name="MShop_variant">' . $option . '</select>';
-        $str .= $modx->parseChunk($tpl, $doc, '[+', '+]');
+        if ($config['tpl_variant'] == false)
+            $doc['variants'] = '<select name="MShop_variant">' . $option . '</select>';
+        else
+            $doc['variants'] = $option;
+        $str .= $modx->parseChunk($config['tpl'], $doc, '[+', '+]');
     }
     echo $str;
 } catch (Exception $e) {

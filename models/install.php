@@ -26,10 +26,12 @@ if ($_POST['step'] == 2 || $_POST['step'] == 3 && $_POST['ok'] != 1) {
 
 if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
     $res[] = '<form method="POST">    
-<input type="hidden" name="step" value="2">
+<input type="hidden" name="step" value="3">
+<input type="hidden" name="ok" value="1">
 <label><input type="checkbox" name="install" value="1" checked> Установить БД и все необходимые чанки</label> <br>
 <label><input type="checkbox" name="template" value="1" checked> Установить 2 новых шаблона (товар, категория)</label> <br>
 <label><input type="checkbox" name="demo" value="1" checked> Установить демо товары (доступно только с генерацией новых шаблонов)</label> <br>
+<label><input type="checkbox" name="cart" value="1" checked> Создать новый документ корзина</label>
 
 <input type="submit" value="установить">
 </form>';
@@ -238,9 +240,9 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
 
             $id_plugin = $this->modx->db->getInsertId();
             $sql = "INSERT INTO " . $this->modx->getFullTableName('site_plugin_events') . " (`pluginid`, `evtid`, `priority`) VALUES
-                (" . $id_plugin . ", 28, 1),
-                (" . $id_plugin . ", 30, 1),
-                (" . $id_plugin . ", 91, 1)
+                (" . $id_plugin . ", 28, 0),
+                (" . $id_plugin . ", 30, 0),
+                (" . $id_plugin . ", 91, 0)
                 ;";
             $result = $this->modx->db->query($sql);
             if ($result)
@@ -255,7 +257,7 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
 
             $id_plugin = $this->modx->db->getInsertId();
             $sql = "INSERT INTO " . $this->modx->getFullTableName('site_plugin_events') . " (`pluginid`, `evtid`, `priority`) VALUES
-                (" . $id_plugin . ", 29, 1);";
+                (" . $id_plugin . ", 29, 0);";
             $result = $this->modx->db->query($sql);
             if ($result)
                 $res[] = 'Плагин2 установлен';
@@ -265,8 +267,8 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
         $sql = "INSERT INTO " . $this->modx->getFullTableName('site_htmlsnippets') . " (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`) VALUES
 ( 'cart_tpl', 'расширенный код корзины при оформлении заказа', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<form class="mshop_cart" action="/assets/modules/shop/ajax.php" method="POST">\r\n<input type="hidden" name="MShop_action" value="add">\r\n<table>\r\n<tr>\r\n<th>Наиименование</th>\r\n<th>Кол-во</th>\r\n<th>Цена</th>\r\n<th></th>\r\n</tr>\r\n[+products_html+]\r\n<tr>\r\n<td colspan="2">На сумму:</td>\r\n<td colspan="2">[+total+]</td>\r\n</tr>\r\n</table>\r\n  <input type="submit" value="пересчитать">\r\n</form>\r\n\r\n\r\n</div>' . "', 0),
 ( 'products_tpl', 'код для одной строки в корзине', 0, 0, 0, '" . '<tr>\r\n<td><a href="">[+pagetitle+] ([+name+] [+article+])</a> ([+id_variant+])</td>\r\n<td><input type="text" value="[+count+]" name="MShop_variant[[+id_variant+]]" onChange="addCart(this, [+id_variant+], this.value)"></td>\r\n<td>[+price+]</td>\r\n<td><a href="javascript:;" onClick="deleteCart(this, [+id_variant+]);">Удалить</a></td>\r\n</tr>' . "', 0),
-( 'min_cart_tpl', 'код для минимальной корзины', 0, 0, 0, '" . '<p>\r\n<strong class="blue">Корзина</strong>\r\n</p>\r\n[+products_html+]\r\nтовара на сумму\r\n<p>\r\n<strong class="blue">\r\n[+total+] рублей\r\n</strong>\r\n</p>\r\n<form>\r\n<button class="bluebutton rounded" formaction="/11">Оформить заказ</button>\r\n</form>' . "', 0),
-( 'min_products_tpl', 'код одной строки товара для минимальной корзины', 0, 0, 0, '" . '<a href="[+url+]">[+pagetitle+]</a> - [+price+] [+count+]шт.\r\n<br/><br/>' . "', 0),
+( 'min_cart_tpl', 'код для минимальной корзины', 0, 0, 0, '" . '<p>\r\n<strong class="blue">Корзина</strong>\r\n</p>\r\n[+products_html+]\r\nтовара на сумму\r\n<p>\r\n<strong class="blue">\r\n[+total+] рублей\r\n</strong>\r\n</p>\r\n\r\n<a href="/cart">Оформить заказ</a>\r\n' . "', 0),
+( 'min_products_tpl', 'код одной строки товара для минимальной корзины', 0, 0, 0, '" . '<a href="[+url+]">[+pagetitle+] [+name+]</a> - [+price+] [+count+]шт.\r\n<br/><br/>' . "', 0),
 ( 'catalog_product_tpl', 'шаблон для списка товаров', 0, 0, 0, '" . '
 <div class="product">\r\n
 <form class="mshop_product" action="/assets/modules/shop/ajax.php" method="POST">\r\n
@@ -285,13 +287,23 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
 	  <p>[+introtext+]</p>\r\n      
 	  <span class="product_price">[+price+]&nbsp;руб</span> <br />\r\n
     <input type="hidden" name="MShop_action" value="add">\r\n
-    <input type="hidden" name="MShop_variant" value="[+id_variant+]" class="MShop_variant">\r\n
+    [+variants+]
     <input type="submit" value="купить">	  \r\n
       </div>\r\n
 \r\n
 </form>\r\n
     </div>    \r\n' . "', 0),
 ( 'helper', 'код хелпера', 0, 0, 0, '" . '
+    <script>
+     $(document).ready(function () {
+                $(\'#MShopHelper\').hide();
+                $(\'.mshop_product\').submit(function(){		
+                            $(\'#MShopHelper\').appendTo(this);			
+                            $(\'#MShopHelper\').show();
+                            return false;			
+                    });
+	});
+    </script>
     <div id="MShopHelper">\r\n
 	<a onclick="hideHelper();return false;" id="cancelButton" href="javascript:;" title="Закрыть">X</a>\r\n	
 
@@ -324,11 +336,15 @@ VALUES (NULL , 'OnMShopOrderFrontView', '7', 'MShop'),
         $sql = "INSERT INTO " . $this->modx->getFullTableName('site_templates') . "  (`templatename` ,`description` ,`editor_type`,`category`,`content`)
 VALUES ('Товар', 'Шаблон 1 товара','0','0','
 <html>
+<head>
+<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js\"></script>
+</head>
 <body>
-<p>[!MShopBreadcrumbs!]</p>
-			
+[!MShopCart?cart_tpl=`min_cart_tpl`&products_tpl=`min_products_tpl`!]
+<p>[!MShopBreadcrumbs!]</p>	
 <h1>[*pagetitle*]</h1>
-<a rel=\"colorbox\" href=\"[!resize?img=`[*blogimage*]`&size=`0`!]\"><img src=\"[!resize?img=`[*blogimage*]`&size=`148`!]\" alt=\"\"></a>
+[*content*]
+<a rel=\"colorbox\" href=\"[*blogimage*]\"><img src=\"[*blogimage*]\" alt=\"\"></a>
 							
 <div class=\"tovprice\">[*price*] P</div>
 							
@@ -348,10 +364,15 @@ VALUES ('Товар', 'Шаблон 1 товара','0','0','
         $sql = "INSERT INTO " . $this->modx->getFullTableName('site_templates') . "  (`templatename` ,`description` ,`editor_type`,`category`,`content`)
 VALUES ('Категория', 'Шаблон для вывода товаров одной категории','0','0','
 <html>
+<head>
+<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js\"></script>
+</head>
 <body>
+[!MShopCart?cart_tpl=`min_cart_tpl`&products_tpl=`min_products_tpl`!]
 <p>[!MShopBreadcrumbs!]</p>
 			
 <h1>[*pagetitle*]</h1>
+[*content*]
 [!MShopCatalog?tpl=`catalog_product_tpl` &parent=`[*id*]` &depth=`2` &limit=`10`&order=`content.menuindex DESC`!]
 </form>				
 </body>
@@ -382,19 +403,33 @@ VALUES ('Категория', 'Шаблон для вывода товаров �
         if ($result)
             $res[] = 'Демо товары установлены';
 
-        $sql = "INSERT INTO " . $this->modx->getFullTableName('mshop_variant') . " (`id`, `id_content`, `article`, `name`, `price`, `stock`, `position`, `unit`, `id_external`) VALUES
-(1, 3, '3 772', 'Весы CAS AP-1 (6M)', 213.00, 1, 1, '', 0),
-(2, 3, '1 032', 'Весы CAS AP-1 (15M)', 215.00, 2, 1, '', 0),
-(3, 5, '9 681', 'Весы CAS AD-2.5', 186.00, 1, 1, 'шт', 0),
-(4, 5, '17 658', 'Весы CAS AD-5', 188.00, 2, 1, 'шт', 0),
-(5, 4, '45ПА', 'Комплект АПк', 1503.00, 0, 1, '', 0),
-(6, 4, '46ПА', 'Комплект АПР', 1600.00, 0, 1, '', 0);
+        $sql = "INSERT INTO " . $this->modx->getFullTableName('mshop_variant') . " (`id_content`, `article`, `name`, `price`, `stock`, `position`, `unit`, `id_external`) VALUES
+( 3, '3 772', 'Весы CAS AP-1 (6M)', 213.00, 1, 1, '', 0),
+( 3, '1 032', 'Весы CAS AP-1 (15M)', 215.00, 2, 1, '', 0),
+( 5, '9 681', 'Весы CAS AD-2.5', 186.00, 1, 1, 'шт', 0),
+( 5, '17 658', 'Весы CAS AD-5', 188.00, 2, 1, 'шт', 0),
+( 4, '45ПА', 'Комплект АПк', 1503.00, 0, 1, '', 0),
+( 4, '46ПА', 'Комплект АПР', 1600.00, 0, 1, '', 0);
 ";
         $result = $this->modx->db->query($sql);
         if ($result)
             $res[] = 'Демо товары установлены 2 раза =))';
     }
-    
+
+    $sql = "UPDATE " . $this->modx->getFullTableName('site_content') . " set cacheable=0, content=\'[!MShopCatalog?tpl=`catalog_product_tpl` &parent=`0` &depth=`2` &limit=`10`&order=`content.menuindex DESC`!]\' where id=" . $this->start_page;
+    $result = $this->modx->db->query($sql);
+    if ($result)
+        $res[] = 'Кеш с входной страницы снят';
+
+    if ($_POST['cart'] == 1) {
+        $sql = "INSERT INTO `modx_site_content` (`type`, `contentType`, `pagetitle`, `longtitle`, `description`, `alias`, `link_attributes`, `published`, `pub_date`, `unpub_date`, `parent`, `isfolder`, `introtext`, `content`, `richtext`, `template`) 
+        VALUES ('document', 'text/html', 'Корзина', '', '', 'cart', '', 1, 0, 0, 0, 0, '', '<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js\"></script>\r\n	[!MShopCart!]\r\n', 0, 0);";
+        $result = $this->modx->db->query($sql);
+        if ($result)
+            $res[] = 'Страница для корзины создана';
+    }
+
+
     $res[] = '<br><br>Еще больше документации на официальном сайте: <a href="http://mshop.rfweb.su/doc">http://mshop.rfweb.su/doc</a><br><br><br><br>';
 }
 ?>

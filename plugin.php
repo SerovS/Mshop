@@ -15,7 +15,7 @@ switch ($e->name) {
         require_once MODX_BASE_PATH . 'assets/modules/shop/models/MShopModel.class.php';
         $mshop = new MShopModel($modx);
         $id_mshop = false;
-        if (is_string($_GET[$mshop->get_catalog]))
+        if (is_string($_GET[$mshop->get_catalog]) && strlen($_GET[$mshop->get_catalog])>1)
             $id_mshop = $mshop->document->getIdDocumentByAlias($_GET[$mshop->get_catalog]);
 
         if (($_GET[$mshop->get_catalog]) && is_numeric($_GET[$mshop->get_catalog]))

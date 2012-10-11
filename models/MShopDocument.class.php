@@ -45,7 +45,7 @@ class MShopDocument {
             if (is_array($template))
                 $where .= ' and content.template in (' . implode(',', $template) . ')';
             if (is_numeric($template))
-                $where .= ' and content.template in (' .intval($template) . ')';
+                $where .= ' and content.template in (' . intval($template) . ')';
         }
         if (is_array($tvs)) {
             foreach ($tvs as $tv) {
@@ -71,7 +71,7 @@ class MShopDocument {
                   left outer join ' . $this->modx->getFullTableName(MShopModel::VARIANT) . ' as variant on (content.id = variant.id_content) 
                       ' . $left . '
                   where 1=1 ' . $where . '  ' . $groupby . $order . $lim;
-       // echo $sql;
+        // echo $sql;
         $result = $this->modx->db->query($sql);
         while ($row = $this->modx->db->getRow($result)) {
             $output[$row['id']] = $row;
@@ -88,7 +88,7 @@ class MShopDocument {
         return $output;
     }
 
-    public function getCount($id = false, $parent = false, $template = false) {                    
+    public function getCount($id = false, $parent = false, $template = false) {
 
         $where = '';
         if (is_numeric($id))
@@ -103,7 +103,7 @@ class MShopDocument {
             if (is_array($template))
                 $where .= ' and content.template in (' . implode(',', $template) . ')';
             if (is_numeric($template))
-                $where .= ' and content.template in (' .intval($template) . ')';
+                $where .= ' and content.template in (' . intval($template) . ')';
         }
 
         $sql = 'select count(*) as count
@@ -514,6 +514,19 @@ class MShopDocument {
             return $row['id'];
         }
         return false;
+    }
+
+    public function getTvParams($ids=false) {
+        $sql = 'select *, tvn.name as name from ' . $this->modx->getFullTableName(MShopModel::TV) . ' as tv
+                 left join ' . $this->modx->getFullTableName('site_tmplvars') . ' as tvn on (tvn.id = tv.tmplvarid)
+                  ';
+        //echo $sql;
+        $res = array();
+        $result = $this->modx->db->query($sql);
+        while ($row = $this->modx->db->getRow($result)) {
+            $res[$row['contentid']][$row['name']] = $row['value'];
+        }
+        return $res;
     }
 
 }
