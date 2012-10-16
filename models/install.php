@@ -265,35 +265,35 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
 
 
         $sql = "INSERT INTO " . $this->modx->getFullTableName('site_htmlsnippets') . " (`name`, `description`, `editor_type`, `category`, `cache_type`, `snippet`, `locked`) VALUES
-( 'cart_tpl', 'расширенный код корзины при оформлении заказа', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<form class="mshop_cart" action="/assets/modules/shop/ajax.php" method="POST">\r\n<input type="hidden" name="MShop_action" value="add">\r\n<table>\r\n<tr>\r\n<th>Наиименование</th>\r\n<th>Кол-во</th>\r\n<th>Цена</th>\r\n<th></th>\r\n</tr>\r\n[+products_html+]\r\n<tr>\r\n<td colspan="2">На сумму:</td>\r\n<td colspan="2">[+total+]</td>\r\n</tr>\r\n</table>\r\n  <input type="submit" value="пересчитать">\r\n</form>\r\n\r\n\r\n</div>' . "', 0),
-( 'products_tpl', 'код для одной строки в корзине', 0, 0, 0, '" . '<tr>\r\n<td><a href="">[+pagetitle+] ([+name+] [+article+])</a> ([+id_variant+])</td>\r\n<td><input type="text" value="[+count+]" name="MShop_variant[[+id_variant+]]" onChange="addCart(this, [+id_variant+], this.value)"></td>\r\n<td>[+price+]</td>\r\n<td><a href="javascript:;" onClick="deleteCart(this, [+id_variant+]);">Удалить</a></td>\r\n</tr>' . "', 0),
-( 'min_cart_tpl', 'код для минимальной корзины', 0, 0, 0, '" . '<p>\r\n<strong class="blue">Корзина</strong>\r\n</p>\r\n[+products_html+]\r\nтовара на сумму\r\n<p>\r\n<strong class="blue">\r\n[+total+] рублей\r\n</strong>\r\n</p>\r\n\r\n<a href="/cart">Оформить заказ</a>\r\n' . "', 0),
-( 'min_products_tpl', 'код одной строки товара для минимальной корзины', 0, 0, 0, '" . '<a href="[+url+]">[+pagetitle+] [+name+]</a> - [+price+] [+count+]шт.\r\n<br/><br/>' . "', 0),
-( 'catalog_product_tpl', 'шаблон для списка товаров', 0, 0, 0, '" . '
-<div class="product">\r\n
-<form class="mshop_product" action="/assets/modules/shop/ajax.php" method="POST">\r\n
-      <a href="[+url+]" class="product_name">[+pagetitle+] </a>\r\n
-      <div id="livecart_animate[+id_variant+]" style="display:none;" class="helper">\r\n
-	  <a href="[+url+]">\r\n
-	  <img src="[+tv1+]" alt="[+longtitle+]" />\r\n
-	  </a>\r\n
-      </div>\r\n
-      <div class="product_image">\r\n
-	  <a href="[+url+]">\r\n
-	  <img src="[+tv1+]" alt="[+longtitle+]" />\r\n
-	  </a>\r\n
-      </div>\r\n
-      <div class="product_desc" >\r\n	       	  
-	  <p>[+introtext+]</p>\r\n      
-	  <span class="product_price">[+price+]&nbsp;руб</span> <br />\r\n
-    <input type="hidden" name="MShop_action" value="add">\r\n
+( 'cart_tpl', 'расширенный код корзины при оформлении заказа', 0, 0, 0, '" . $this->modx->db->escape('<div><h1>Корзина</h1><form class="mshop_cart" action="/assets/modules/shop/ajax.php" method="POST"><input type="hidden" name="MShop_action" value="add"><table><tr><th>Наиименование</th><th>Кол-во</th><th>Цена</th><th></th></tr>[+products_html+]<tr><td colspan="2">На сумму:</td><td colspan="2">[+total+]</td></tr></table>  <input type="submit" value="пересчитать"></form></div>') . "', 0),
+( 'products_tpl', 'код для одной строки в корзине', 0, 0, 0, '" .  $this->modx->db->escape('<tr><td><a href="">[+pagetitle+] ([+name+] [+article+])</a> ([+id_variant+])</td><td><input type="text" value="[+count+]" name="MShop_variant[[+id_variant+]]" onChange="addCart(this, [+id_variant+], this.value)"></td><td>[+price+]</td><td><a href="javascript:;" onClick="deleteCart(this, [+id_variant+]);">Удалить</a></td></tr>') . "', 0),
+( 'min_cart_tpl', 'код для минимальной корзины', 0, 0, 0, '" .  $this->modx->db->escape('<p><strong class="blue">Корзина</strong></p>[+products_html+]товара на сумму<p><strong class="blue">[+total+] рублей</strong></p><a href="/cart">Оформить заказ</a>') . "', 0),
+( 'min_products_tpl', 'код одной строки товара для минимальной корзины', 0, 0, 0, '" .  $this->modx->db->escape('<a href="[+url+]">[+pagetitle+] [+name+]</a> - [+price+] [+count+]шт.<br/><br/>') . "', 0),
+( 'catalog_product_tpl', 'шаблон для списка товаров', 0, 0, 0, '" .  $this->modx->db->escape('
+<div class="product">
+<form class="mshop_product" action="/assets/modules/shop/ajax.php" method="POST">
+      <a href="[+url+]" class="product_name">[+pagetitle+] </a>
+      <div id="livecart_animate[+id_variant+]" style="display:none;" class="helper">
+	  <a href="[+url+]">
+	  <img src="[+tv1+]" alt="[+longtitle+]" />
+	  </a>
+      </div>
+      <div class="product_image">
+	  <a href="[+url+]">
+	  <img src="[+tv1+]" alt="[+longtitle+]" />
+	  </a>
+      </div>
+      <div class="product_desc" >	       	  
+	  <p>[+introtext+]</p>      
+	  <span class="product_price">[+price+]&nbsp;руб</span> <br />
+    <input type="hidden" name="MShop_action" value="add">
     [+variants+]
-    <input type="submit" value="купить">	  \r\n
-      </div>\r\n
-\r\n
-</form>\r\n
-    </div>    \r\n' . "', 0),
-( 'helper', 'код хелпера', 0, 0, 0, '" . '
+    <input type="submit" value="купить">	  
+      </div>
+
+</form>
+    </div>    ') . "', 0),
+( 'helper', 'код хелпера', 0, 0, 0, '" .  $this->modx->db->escape('
     <script>
      $(document).ready(function () {
                 $(\'#MShopHelper\').hide();
@@ -304,17 +304,17 @@ if ($_POST['step'] == 3 && $_POST['ok'] == 1) {
                     });
 	});
     </script>
-    <div id="MShopHelper">\r\n
-	<a onclick="hideHelper();return false;" id="cancelButton" href="javascript:;" title="Закрыть">X</a>\r\n	
+    <div id="MShopHelper">
+	<a onclick="hideHelper();return false;" id="cancelButton" href="javascript:;" title="Закрыть">X</a>	
 
-	<label>Кол-во:<input type="text" size="10" class="quantity" name="count" value="1" id="MShop_count"/></label>\r\n
-	<a onclick="upHelper();return false;" href="javascript:;" id="up" title="Увеличить кол-во">&uarr;</a>\r\n
-	<a onclick="downHelper();return false;" id="down" href="javascript:;" title="Уменьшить кол-во">&darr;</a>		\r\n
+	<label>Кол-во:<input type="text" size="10" class="quantity" name="count" value="1" id="MShop_count"/></label>
+	<a onclick="upHelper();return false;" href="javascript:;" id="up" title="Увеличить кол-во">&uarr;</a>
+	<a onclick="downHelper();return false;" id="down" href="javascript:;" title="Уменьшить кол-во">&darr;</a>		
 
-	<button class="bluebutton rounded" onclick="sendHelper(this);return false;">Добавить</button>\r\n
-</div><!--/mshophelper-->\r\n
-' . "', 0),
-( 'empty_cart_tpl', 'код пустой корзины', 0, 0, 0, '" . '<div>\r\n<h1>Корзина</h1>\r\n<p>Корзина пуста</p>\r\n\r\n</div>' . "', 0);";
+	<button class="bluebutton rounded" onclick="sendHelper(this);return false;">Добавить</button>
+</div><!--/mshophelper-->
+') . "', 0),
+( 'empty_cart_tpl', 'код пустой корзины', 0, 0, 0, '" . '<div><h1>Корзина</h1><p>Корзина пуста</p></div>' . "', 0);";
 
         $result = $this->modx->db->query($sql);
         if ($result)
@@ -416,7 +416,7 @@ VALUES ('Категория', 'Шаблон для вывода товаров �
             $res[] = 'Демо товары установлены 2 раза =))';
     }
 
-    $sql = "UPDATE " . $this->modx->getFullTableName('site_content') . " set cacheable=0, content=\'[!MShopCatalog?tpl=`catalog_product_tpl` &parent=`0` &depth=`2` &limit=`10`&order=`content.menuindex DESC`!]\' where id=" . $this->start_page;
+    $sql = "UPDATE " . $this->modx->getFullTableName('site_content') . " set cacheable=0, content='[!MShopCatalog?tpl=`catalog_product_tpl` &parent=`0` &depth=`2` &limit=`10`&order=`content.menuindex DESC`!]' where id=" . $this->start_page;
     $result = $this->modx->db->query($sql);
     if ($result)
         $res[] = 'Кеш с входной страницы снят';
