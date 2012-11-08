@@ -277,6 +277,7 @@ class MShopDocument {
             $this->modx->db->delete($this->modx->getFullTableName(MShopModel::BRAND), 'id_content = "' . $id . '"');
             $this->modx->db->delete($this->modx->getFullTableName(MShopModel::PROPERTIES), 'id_content = "' . $id . '"');
             $this->modx->db->delete($this->modx->getFullTableName(MShopModel::VARIANT), 'id_content = "' . $id . '"');
+            $this->modx->db->delete($this->modx->getFullTableName(MShopModel::TV), 'contentid = "' . $id . '"');
         }
     }
 
@@ -516,7 +517,7 @@ class MShopDocument {
         return false;
     }
 
-    public function getTvParams($ids=false) {
+    public function getTvParams($ids = false) {
         $sql = 'select *, tvn.name as name from ' . $this->modx->getFullTableName(MShopModel::TV) . ' as tv
                  left join ' . $this->modx->getFullTableName('site_tmplvars') . ' as tvn on (tvn.id = tv.tmplvarid)
                   ';

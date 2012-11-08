@@ -422,7 +422,7 @@ VALUES ('Категория', 'Шаблон для вывода товаров �
         $res[] = 'Кеш с входной страницы снят';
 
     if ($_POST['cart'] == 1) {
-        $sql = "INSERT INTO `modx_site_content` (`type`, `contentType`, `pagetitle`, `longtitle`, `description`, `alias`, `link_attributes`, `published`, `pub_date`, `unpub_date`, `parent`, `isfolder`, `introtext`, `content`, `richtext`, `template`) 
+        $sql = "INSERT INTO ". $this->modx->getFullTableName('site_content') ." (`type`, `contentType`, `pagetitle`, `longtitle`, `description`, `alias`, `link_attributes`, `published`, `pub_date`, `unpub_date`, `parent`, `isfolder`, `introtext`, `content`, `richtext`, `template`) 
         VALUES ('document', 'text/html', 'Корзина', '', '', 'cart', '', 1, 0, 0, 0, 0, '', '<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js\"></script>\r\n	[!MShopCart!]\r\n', 0, 0);";
         $result = $this->modx->db->query($sql);
         if ($result)

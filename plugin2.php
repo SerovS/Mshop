@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Печатает поля для добавления вариантов и свойств при редактировании документов. 
  * @author SerovAlexander <serov.sh@gmail.com>
@@ -19,7 +20,7 @@ if ($e->name == 'OnDocFormRender') {
         if (isset($_POST['mshop_redirect']))
             $redirect = $_POST['mshop_redirect'];
         else
-            $redirect = 'index.php?a=' . $_GET['last_a'] . '&id=' . $_GET['last_id'] . '&view=' . $_GET['last_view'].'&mshop_pid=' . $_GET['mshop_pid'];
+            $redirect = 'index.php?a=' . $_GET['last_a'] . '&id=' . $_GET['last_id'] . '&view=' . $_GET['last_view'] . '&mshop_pid=' . $_GET['mshop_pid'];
         $output.='<script type="text/javascript">
             
 
@@ -37,9 +38,16 @@ if ($e->name == 'OnDocFormRender') {
             
                 </script>';
 
-        if ($content['template'] != $mshop->product_template) {
-            $e->output($output);
-            return '';
+        if (is_array($mshop->product_template)) {
+            if (!in_array($content['template'], $mshop->product_template)) {
+                $e->output($output);
+                return '';
+            }
+        } else {
+            if ($content['template'] != $mshop->product_template) {
+                $e->output($output);
+                return '';
+            }
         }
 
 
