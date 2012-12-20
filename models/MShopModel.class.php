@@ -221,6 +221,7 @@ Class MShopModel {
                     $total += $docs[$id]['price'] * $count;
                 }
             }
+            $res['count'] = count($res['products']);
             $res['total'] = $total;
         }
         return $res;
@@ -303,7 +304,7 @@ Class MShopModel {
             $start = ($i * $limit) - $limit;
             if ($current == $start)
                 $class = 'active';
-            $res .= '<a href="' . MShopController::getURL(array('mshop_start' => $start)) . '" class="pager ' . $class . '">' . $i . '</a>';
+            $res .= '<a href="' . MShopController::getURL(array('mshop_start' => $start)) . '" class="pager ' . $class . '">' . $i . '</a> ';
             $class = '';
         }
         return $res;

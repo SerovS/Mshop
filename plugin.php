@@ -136,6 +136,8 @@ switch ($e->name) {
             else
                 $redirect = 'index.php?a=' . $_GET['last_a'] . '&id=' . $_GET['last_id'] . '&view=' . $_GET['last_view'] . '&mshop_pid=' . $mshop_pid;
             $output .= '<input type="hidden" value="' . $redirect . '" name="mshop_redirect">';
+            $output .= '<input type="hidden" value="' . $_GET['last_id'] . '" name="mshop_last_id">';
+            $output .= '<input type="hidden" value="' . $_GET['last_a'] . '" name="mshop_last_a">';
             $tbl_site_tmplvar_contentvalues = $mshop->modx->getFullTableName(MShopModel::TV); //таблица mshop tv
         }
         break;

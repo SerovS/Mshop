@@ -193,8 +193,9 @@ class MShopVariant {
      *  $arr - массив изменяемых значений, формате id документа, значение
      *  $name - имя изменяемого значения
      * */
-    public function updatevars($arr, $name) {
+    public function updateVars($arr, $name) {
         foreach ($arr as $id => $value) {
+            $value=str_replace(',','.',$value);
             $fields[$name] = $value;
             $this->update($fields, $id);
         }

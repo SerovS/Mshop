@@ -66,15 +66,13 @@ class MShopDocument {
             $groupby = ' GROUP BY content.id ';
         }
         
-        
-        
         $sql = 'select *, brand.id_brand as id_brand, content.id as id, variant.id as id_variant, variant.price as price, variant.stock as stock, variant.name as variant_name, variant.article as article ' . $select . '
-                  from ' . $this->modx->getFullTableName(MShopModel::CONTENT) . ' as content 
+                  from (select * from ' . $this->modx->getFullTableName(MShopModel::CONTENT) . ' as content where 1 '.$where .$order. $lim.') as content
                   left outer join ' . $this->modx->getFullTableName(MShopModel::BRAND) . ' as brand on (content.id = brand.id_content)                  
                   left outer join ' . $this->modx->getFullTableName(MShopModel::VARIANT) . ' as variant on (content.id = variant.id_content) 
                       ' . $left . '
-                  where 1=1 ' . $where . '  ' . $groupby . $order . $lim;
-        // echo $sql;
+                  where 1=1  ' . $groupby ;
+         //echo $sql;
         $result = $this->modx->db->query($sql);
         while ($row = $this->modx->db->getRow($result)) {
             $output[$row['id']] = $row;

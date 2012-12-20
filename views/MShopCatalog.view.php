@@ -35,12 +35,20 @@ Class MShopCatalog {
 
         if (isset($_POST['search'])) {
             $str = $this->model->modx->db->escape(trim($_POST['search']));
-            $this->search = ' and (content.pagetitle like \'%' . $str . '%\' or variant.name like \'%' . $str . '%\' or variant.article like \'%' . $str . '%\')';
+            $this->search = ' and (content.pagetitle like \'%' . $str . '%\' or content.longtitle like \'%' . $str . '%\' or content.content like \'%' . $str . '%\')';
             $this->str = $_POST['search'];
             $_GET['mshop_pid'] = false;
         }
         if (isset($_GET['mshop_remove_id']) && is_numeric($_GET['mshop_remove_id'])) {
             $this->model->document->remove($_GET['mshop_remove_id']);
+        }
+
+        if (isset($_POST['mshop_price']) && is_array($_POST['mshop_price'])) {
+            $this->model->variant->updateVars($_POST['mshop_price'], 'price');
+        }
+        
+        if (isset($_POST['mshop_stock']) && is_array($_POST['mshop_stock'])) {
+            $this->model->variant->updateVars($_POST['mshop_stock'], 'stock');
         }
     }
 
@@ -86,12 +94,12 @@ Class MShopCatalog {
 
     public function render() {
         $res = '<form method="POST">
-        <input type="text" name="search" value="'.$this->str.'">
+        <input type="text" name="search" value="' . $this->str . '">
         <input type="submit" name="go" value="искать">
         </form><a href="' . $this->getEditUrl(array('id' => 'new')) . '&mshop_template=' . $this->model->getCurrentCategoryTemplate() . '">Новый документ</a> <br/>';
         $res .= '<p>Путь: ' . $this->getBreadcrumbs() . '</p>';
 
-        $res .= '<table class="zebra" width="100%" cellspacing="0" cellpadding="0">
+        $res .= '<form method="POST"><table class="zebra" width="100%" cellspacing="0" cellpadding="0">
             <col style="width: 4%;" />
             <col style="width: 46%;" />
             <col style="width: 10%;" />
@@ -121,7 +129,7 @@ Class MShopCatalog {
         if (!isset($_GET['mshop_pid']))
             $_GET['mshop_pid'] = 0;
         $docs = $this->model->document->getDocuments(
-                false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, true,$this->search
+                false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, false, $this->search
         );
         foreach ($docs as $doc) {
             if ($this->model->document->isProduct($doc)) {
@@ -135,8 +143,8 @@ Class MShopCatalog {
                         <td>' . $doc['id'] . '</td>
                         <td><a href="' . $url . '" title="' . $title . '">' . $doc['pagetitle'] . '</a> </td>';
             if ($this->model->document->isProduct($doc))
-                $res .='  <td><input type="text" name="mshop_price[' . $doc['id'] . ']" value="' . $doc['price'] . '"></td>
-                            <td><input type="text" name="mshop_stock[' . $doc['id'] . ']" value="' . $doc['stock'] . '"></td>';
+                $res .='  <td><input type="text" name="mshop_price[' . $doc['id_variant'] . ']" value="' . $doc['price'] . '"></td>
+                            <td><input type="text" name="mshop_stock[' . $doc['id_variant'] . ']" value="' . $doc['stock'] . '"></td>';
             else
                 $res .='  <td></td>
                             <td></td>';
@@ -150,9 +158,11 @@ Class MShopCatalog {
                             </td>
                                 </tr>';
         }
-        $res .= '</table>';
-        $res.='<div class="pager">' . $this->model->getPager($this->model->document->getCount(
-                                false, $_GET['mshop_pid'], $tempaltes), $this->model->limit, $start) . '</div>';
+        $res .= '</table><input type="submit" value="Сохранить">
+</form>';
+        if (empty($this->str))
+            $res.='<div class="pager">' . $this->model->getPager($this->model->document->getCount(
+                                    false, $_GET['mshop_pid'], $tempaltes), $this->model->limit, $start) . '</div>';
         /*
           $res.='<link rel="stylesheet" type="text/css" href="../assets/modules/shop/css/dtree.css" media="all" />
           <script type="text/javascript" src="../assets/modules/shop/js/dtree.js"></script>
