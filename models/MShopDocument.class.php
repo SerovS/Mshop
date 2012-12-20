@@ -65,6 +65,9 @@ class MShopDocument {
         if ($group) {
             $groupby = ' GROUP BY content.id ';
         }
+        
+        
+        
         $sql = 'select *, brand.id_brand as id_brand, content.id as id, variant.id as id_variant, variant.price as price, variant.stock as stock, variant.name as variant_name, variant.article as article ' . $select . '
                   from ' . $this->modx->getFullTableName(MShopModel::CONTENT) . ' as content 
                   left outer join ' . $this->modx->getFullTableName(MShopModel::BRAND) . ' as brand on (content.id = brand.id_content)                  

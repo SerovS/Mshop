@@ -314,10 +314,8 @@ Class MShopModel {
      * @return boolean 
      */
     public function isInstall() {
-        $sql = 'SHOW TABLE STATUS FROM '.$this->modx->db->config['dbase'].' where name like \'%mshop_content%\'';
-        
+        $sql = 'SHOW TABLE STATUS FROM '.$this->modx->db->config['dbase'].' where name like \'%'.$this->modx->db->config['table_prefix'].'mshop_content%\'';                
         $result = $this->modx->db->query($sql);
-        
         $row = $this->modx->db->getRow($result);
         
         

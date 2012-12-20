@@ -43,7 +43,7 @@ class MShopVariant {
         foreach ($variants as $id_variant => $variant_data) {
             if (is_numeric($id_variant) && $id_variant > 0)
                 $this->update($this->checkData($variant_data, $id_content), $id_variant);
-            elseif (is_numeric($variant_data['price']) && $variant_data['price'] > 0)
+            else
                 $this->insert($this->checkData($variant_data, $id_content));
         }
     }
@@ -78,6 +78,7 @@ class MShopVariant {
     public function checkData($arr, $id_content) {
         // preprocess POST values
         $res['id_content'] = $id_content;
+        $arr['price'] = str_replace(',', '.', $arr['price']);
         $res['price'] = $this->modx->db->escape($arr['price']);
         $res['article'] = $this->modx->db->escape($arr['article']);
         $res['name'] = isset($arr['name']) ? $this->modx->db->escape($arr['name']) : ''; //документ имя

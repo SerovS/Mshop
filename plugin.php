@@ -15,7 +15,7 @@ switch ($e->name) {
         require_once MODX_BASE_PATH . 'assets/modules/shop/models/MShopModel.class.php';
         $mshop = new MShopModel($modx);
         $id_mshop = false;
-        if (is_string($_GET[$mshop->get_catalog]) && strlen($_GET[$mshop->get_catalog])>1)
+        if (is_string($_GET[$mshop->get_catalog]) && strlen($_GET[$mshop->get_catalog]) > 1)
             $id_mshop = $mshop->document->getIdDocumentByAlias($_GET[$mshop->get_catalog]);
 
         if (($_GET[$mshop->get_catalog]) && is_numeric($_GET[$mshop->get_catalog]))
@@ -74,7 +74,16 @@ switch ($e->name) {
                 $mshop->document->saveTVs($tmplvars, $id_content);
 
             //формируем редирект
-            echo '<script type="text/javascript">setTimeout(function(){document.location = "' . $_POST['mshop_redirect'] . '&mshop_pid=' . $_REQUEST['mshop_parent'] . '";},500);</script>';
+
+            if ($_POST['stay'] == 2) {
+                $link = 'index.php?mshop_id=' . $id_content . '&mshop=1&a=27&id=' . $mshop->start_page . '&last_a=' . $_POST['mshop_last_a'] . '&last_id=' . $_POST['mshop_last_id'] . '&last_view=MShopCatalog';
+                echo '<script type="text/javascript">setTimeout(function(){document.location = "' . $link . '";},500);</script>';
+            } elseif ($_POST['stay'] == 1) {
+                echo '<p>Создание нового документа не возможно! Пока.</p>';
+                echo '<script type="text/javascript">setTimeout(function(){document.location = "' . $_POST['mshop_redirect'] . '&mshop_pid=' . $_REQUEST['mshop_parent'] . '";},500);</script>';
+            }else
+                echo '<script type="text/javascript">setTimeout(function(){document.location = "' . $_POST['mshop_redirect'] . '&mshop_pid=' . $_REQUEST['mshop_parent'] . '";},500);</script>';
+
             exit;
         }
         break;
@@ -102,12 +111,11 @@ switch ($e->name) {
                     $current_template = $mshop->product_template[0];
                 else
                     $current_template = $mshop->product_template;
-                $doc['template'] =isset($_GET['mshop_template']) ? $_GET['mshop_template'] : $current_template;
+                $doc['template'] = isset($_GET['mshop_template']) ? $_GET['mshop_template'] : $current_template;
             }
 
 
             $content = array_merge($content, $doc); //подменяем значениями из таблицы mshop
-            
             //устанавливаем пременную mshop_parent. Родитель в таблице mshop
             if (isset($_GET['mshop_pid']))
                 $content['mshop_parent'] = $_GET['mshop_pid'];

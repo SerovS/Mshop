@@ -13,6 +13,8 @@ Class MShopCatalog {
     }
 
     function run() {
+        $this->search = '';
+        $this->str = '';
         try {
             $this->output.= '<div class="sectionHeader">Название страницы модуля</div>
                                     <div class="sectionBody">
@@ -31,6 +33,12 @@ Class MShopCatalog {
 
     function actions() {
 
+        if (isset($_POST['search'])) {
+            $str = $this->model->modx->db->escape(trim($_POST['search']));
+            $this->search = ' and (content.pagetitle like \'%' . $str . '%\' or variant.name like \'%' . $str . '%\' or variant.article like \'%' . $str . '%\')';
+            $this->str = $_POST['search'];
+            $_GET['mshop_pid'] = false;
+        }
         if (isset($_GET['mshop_remove_id']) && is_numeric($_GET['mshop_remove_id'])) {
             $this->model->document->remove($_GET['mshop_remove_id']);
         }
@@ -71,13 +79,16 @@ Class MShopCatalog {
                             'id' => $this->model->start_page,
                             'last_a' => $_GET['a'],
                             'last_id' => $_GET['id'],
-                            'last_view' => $_GET['view']                        
+                            'last_view' => $_GET['view']
                         )
         );
     }
 
     public function render() {
-        $res = '<a href="' . $this->getEditUrl(array('id' => 'new')) . '&mshop_template='.$this->model->getCurrentCategoryTemplate().'">Новый документ</a> <br/>';
+        $res = '<form method="POST">
+        <input type="text" name="search" value="'.$this->str.'">
+        <input type="submit" name="go" value="искать">
+        </form><a href="' . $this->getEditUrl(array('id' => 'new')) . '&mshop_template=' . $this->model->getCurrentCategoryTemplate() . '">Новый документ</a> <br/>';
         $res .= '<p>Путь: ' . $this->getBreadcrumbs() . '</p>';
 
         $res .= '<table class="zebra" width="100%" cellspacing="0" cellpadding="0">
@@ -110,7 +121,7 @@ Class MShopCatalog {
         if (!isset($_GET['mshop_pid']))
             $_GET['mshop_pid'] = 0;
         $docs = $this->model->document->getDocuments(
-                false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, true
+                false, $_GET['mshop_pid'], $templates, false, $this->model->limit, $start, false, true,$this->search
         );
         foreach ($docs as $doc) {
             if ($this->model->document->isProduct($doc)) {
