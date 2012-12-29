@@ -415,8 +415,8 @@ class MShopDocument {
             $pages = $count / $limit;
         }
         $res = $class = '';
-        $docs = $this->getDocuments($this->model->current_page);
-        $current_doc = current($docs);
+//        $docs = $this->getDocuments($this->model->current_page);
+//        $current_doc = current($docs);
         for ($i = 1; $i <= $pages; $i++) {
             $start = ($i * $limit) - $limit;
             $url = $current_url . '?' . http_build_query(array($prefix . '_start' => $start), '', '&amp;');
