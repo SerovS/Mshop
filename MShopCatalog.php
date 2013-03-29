@@ -47,10 +47,14 @@ try {
         $modx->setPlaceholder($config['id'] . '_page', $pager);
     }
     $str = '';
-    
+
     if ($config['gettv'] === true) {
         $par = $mshop->document->getTvParams();
     }
+
+
+    if (isset($_GET[$mshop->get_catalog]) && is_numeric($_GET[$mshop->get_catalog]))
+        $active_page_id = $_GET[$mshop->get_catalog];
 
     foreach ($docs as $doc) {
         if ($config['gettv'] === true && is_array($par[$doc['id']])) {
@@ -58,6 +62,9 @@ try {
                 $doc[$name] = $value;
         }
         $option = '';
+        $doc['class'] = '';
+        if ($doc['id'] == $active_page_id)
+            $doc['class'] = 'active';
         foreach ($doc['variants'] as $id => $var) {
             if ($config['tpl_variant']) {
                 $var['id_variant'] = $id;
